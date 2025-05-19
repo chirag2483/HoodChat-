@@ -22,7 +22,8 @@ const userSchema = mongoose.Schema({
         type:String,
         default:""
     },
-})
+    //used to show members since time ????
+},{timestamps:true});
 
 const User = mongoose.model("User",userSchema);
 export default User;

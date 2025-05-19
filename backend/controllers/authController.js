@@ -74,8 +74,9 @@ export const login = async (req,res)=>{
             return res.status(400).json({error:"please fill all fields"})
         }
         const user = await User.findOne({userName});
-        const isPasswordMatched = await bcrypt.compare(password,user.password);
-        if(!user || !isPasswordMatched){
+        const isPasswordCorrect = await bcrypt.compare(password,user?.password||" ");//gives "" in password in case password not found
+        
+        if(!user || !isPasswordCorrect){
             return res.status(400).json({error:"Invalid credentials"})
         }
 
@@ -93,5 +94,12 @@ export const login = async (req,res)=>{
     }
 }
 export const logout = (req,res)=>{  
-    res.send("user logged out")
+  try{
+       res.cookie("jwt","",{maxAge:0});
+         res.status(200).json({message:"logged out successfully"})
+    }
+    catch(error){
+            console.log("Error in logout",error.message);
+            res.status(500).json({error: "Internal server error"});
+        }
 };
