@@ -6,9 +6,7 @@ HoodChat is a modern, real-time chat application designed to connect people seam
 
 - Real-time messaging
 - User authentication
-- Group chats
-- Media sharing (images, videos, etc.)
-- Notifications for new messages
+- Notification sounds for new messages
 - Responsive design for mobile and desktop
 
 ## Installation
@@ -38,33 +36,11 @@ HoodChat is a modern, real-time chat application designed to connect people seam
 
 ## Technologies Used
 
-- **Frontend**: React, Redux
+- **Frontend**: React , tailwindcss
 - **Backend**: Node.js, Express
 - **Database**: MongoDB
 - **Real-time Communication**: Socket.IO
 
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch:
-    ```bash
-    git checkout -b feature-name
-    ```
-3. Commit your changes:
-    ```bash
-    git commit -m "Add feature-name"
-    ```
-4. Push to the branch:
-    ```bash
-    git push origin feature-name
-    ```
-5. Open a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
