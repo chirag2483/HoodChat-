@@ -1,35 +1,46 @@
-import express from "express"
-import dotenv from "dotenv"
-import cookieParser from "cookie-parser";
+require("dotenv").config();
+require("express-async-errors");
+const cors = require("cors");
+const express = require("express");
+// const app = express();
+const { app, server } = require("./socket/socket");
+const cookieParser = require("cookie-parser");
+const notFoundMiddleware = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Allow requests from this origin
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  })
+);
 
-import authRoutes from "./routes/authRoutes.js"
-import messageRoutes from "./routes/messageRoutes.js"
-import userRoutes from "./routes/userRoutes.js"
+app.use(cookieParser());
+app.use(express.json());
+const connectDB = require("./db/connect");
 
-import connectDB from "./Db/connect.js"
+const authRouter = require("./routes/auth");
+const messageRouter = require("./routes/message");
+const userRouter = require("./routes/user");
 
-dotenv.config();
-const app = express();
-const PORT = process.env.PORT || 5000;
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/users", userRouter);
 
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
-app.use(express.json()); // from req.body
-app.use(cookieParser()); // for cookies
+const port = process.env.PORT || 5000;
 
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    server.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-app.use("/api/auth",authRoutes);
-app.use("/api/message",messageRoutes);
-app.use("/api/users",userRoutes);
-
-app.get("/", (req, res) => {
-    res.send("Hello World!");
-});
-
-
-
-
-app.listen(PORT, ()=>{
-    connectDB()
-    console.log(`Server is running on port ${PORT}`);
-});    
+start();
